@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: install postgres-server
+      apt: 
+        name: postgres-server
+        state: present
+        update_cache: yes
+
+    - name: create database user with name 'mydb' and password '12345' with all database privileges
+      postgres_user: # sth else is here
+        name: myuser
+        password: 12345
+        priv: '*.*:ALL'
+        state: present
+
+    - name: ensure postgres started
+      service:
+        name: postgres
+        state: started
+        enabled: yes

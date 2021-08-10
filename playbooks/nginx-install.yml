@@ -1,0 +1,50 @@
+---
+- name: install nginx
+  hosts: all
+  become: true
+  tasks: 
+  # task 1
+  - name: install nginx package
+    apt:
+        name: nginx
+        state: present
+        update_cache: yes
+  # task 2
+  - name: ensure nginx service started
+    service:
+        name: nginx
+        state: started
+        enabled: yes
+
+  # task 3
+  - name: django configs
+
+  # below not runned yet
+  # task 4
+  - name: copy demo nginx conf to remote
+    copy:
+        src: ../files/demo/demo
+        dest: /etc/nginx/sites-available
+        mode: 0755
+
+  # task 5
+  - name: disable default nginx conf
+    file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+    notify: restart nginx
+
+  # task 6
+  - name: enable demo nginx conf
+    file:
+        src: /etc/nginx/sites-available/demo
+        dest: /etc/nginx/sites-enabled/demo
+        state: link
+    notify: restart nginx
+
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

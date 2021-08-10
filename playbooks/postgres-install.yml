@@ -1,22 +1,35 @@
 ---
-- hosts: all
+- name: install postgres
+  hosts: all
   become: true
+  vars:
+    postgres_root_password: pass123456789
+
   tasks:
+
+    - name: print postgres password
+      debug:
+        msg: postgres root pass is {{postgres_root_password | quote}}
+      tags: pure_ansible
+
     - name: install postgres-server
       apt: 
         name: postgres-server
         state: present
         update_cache: yes
+      tags: pure_ansible
 
     - name: create database user with name 'mydb' and password '12345' with all database privileges
       postgres_user: # sth else is here
         name: myuser
-        password: 12345
+        password: {{postgres_myuser_password}}
         priv: '*.*:ALL'
         state: present
+      tags: pure_ansible
 
     - name: ensure postgres started
       service:
         name: postgres
         state: started
         enabled: yes
+      tags: pure_ansible

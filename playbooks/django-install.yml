@@ -1,0 +1,60 @@
+---
+- hosts: gcloud_ansible
+
+  vars:
+    app_dir: "{{user_dir}}/e-movies-app"
+    git_repo_url: "https://github.com/panagiotisbellias/e-movies-app.git"
+    git_repo_branch: "main"
+
+  tasks:
+
+  - name: print user_dir
+    debug:
+        msg: "user dir is {{user_dir}}"
+
+  - name: Run whoami without become.
+    command: whoami
+    changed_when: false
+    become: false
+    register: whoami
+
+  - name: Set a fact with the user name.
+    set_fact:
+        login_user: "{{ whoami.stdout }}"
+
+  - name: print user name
+    debug:
+        msg: "login user is {{login_user}}"
+
+  - name: ensure github.com is a known host
+    lineinfile:
+        dest: "{{user_dir}}/.ssh/known_hosts"
+        create: yes
+        state: present
+        line: "{{lookup('pipe', 'ssh-keyscan -t rsa github.com')}}"
+        regexp: "^github\\.com"
+
+  - name: clone django project
+    git:
+        repo: "{{git_repo_url}}"
+        version: "{{git_repo_branch}}"
+        clone: yes
+        force: yes
+        dest: "{{app_dir}}"
+    changed_when: true
+
+  - name: copy env file
+    shell: "cp {{app_dir}}/movies_app/movies_app/.env.example {{app_dir}}/movies_app/movies_app/.env"
+
+  - name: populate ~/.env
+    lineinfile:
+        dest: "{{app_dir}}/movies_app/movies_app/.env"
+        state: present
+        regexp: "^{{item_key}}="
+        line: "{{item_key}}='{{item_value}}'"
+    with_items:
+        - "{{django.env | dict2items}}"
+
+  - name: print ip
+    debug:
+        msg: "ALLOWED_HOSTS={{ansible_all_ipv4_addresses}}"

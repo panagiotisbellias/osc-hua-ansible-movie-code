@@ -27,9 +27,43 @@
         state: present
       tags: pure_ansible
 
+    - name: create demo database
+      postgres_db:
+        login_host: 'localhost'
+        login_user: 'root'
+        login_password: "{{postgres_root_password}}"
+        name: demo
+        state: present
+
+    - name: create demo user
+      postgres_user:
+        login_host: 'localhost'
+        login_user: 'root'
+        login_password: "{{postgres_root_password}}"
+        name: demo
+        password: demo
+        priv: demo.*:ALL
+        host: '%'
+        state: present
+
     - name: ensure postgres started
       service:
         name: postgres
         state: started
         enabled: yes
+      tags: pure_ansible
+    
+    - name: ensure postgres listening on all ports
+      lineinfile:
+        dest: /etc/postgres/postgres.conf.d/postgresd.cnf
+        regexp: ^bind-address
+        line: "bind-address = 0.0.0.0"
+      notify: restart mysql
+      tags: pure_ansible
+
+  handlers:
+    - name: restart postgres
+      service:
+        name: postgres-server
+        state: restarted
       tags: pure_ansible

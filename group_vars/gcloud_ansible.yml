@@ -1,1 +1,6 @@
 postgres_myuser_password: pass123
+
+django:
+    env:
+        SECRET_KEY: 'test123'
+        DATABASE_URL: '...'

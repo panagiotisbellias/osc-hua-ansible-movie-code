@@ -3,4 +3,7 @@ postgres_myuser_password: pass123
 django:
     env:
         SECRET_KEY: 'test123'
-        DATABASE_URL: '...'
+        DATABASE_URL: 'sqlite:///./db.sqlite3'
+        ALLOWED_HOSTS: '127.0.0.1,localhost'
+        EMAIL_USER: 'devops.mailing.71.110@gmail.com'
+        EMAIL_PASSWD: ''

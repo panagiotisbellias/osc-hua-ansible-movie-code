@@ -81,13 +81,13 @@
     - name: make migrations
       django_manage:
         command: "makemigrations"
-        project_path: "{{app_dir}}/movies_app"
+        app_path: "{{app_dir}}/movies_app"
         virtualenv: "{{app_dir}}/myvenv"
 
     - name: migrate
       django_manage:
         command: "migrate"
-        project_path: "{{app_dir}}/movies_app"
+        app_path: "{{app_dir}}/movies_app"
         virtualenv: "{{app_dir}}/myvenv"
 
     - name: copy django service file

@@ -1,69 +1,33 @@
 ---
 - name: install postgres
   hosts: all
-  become: true
-  vars:
-    postgres_root_password: pass123456789
-
+  roles:
+    - role: geerlingguy.postgresql
+      become: yes
   tasks:
-
-    - name: print postgres password
-      debug:
-        msg: postgres root pass is {{postgres_root_password | quote}}
-      tags: pure_ansible
-
-    - name: install postgres-server
-      apt: 
-        name: postgres-server
-        state: present
-        update_cache: yes
-      tags: pure_ansible
-
-    - name: create database user with name 'mydb' and password '12345' with all database privileges
-      postgres_user: # sth else is here
-        name: myuser
-        password: {{postgres_myuser_password}}
-        priv: '*.*:ALL'
-        state: present
-      tags: pure_ansible
-
-    - name: create demo database
-      postgres_db:
-        login_host: 'localhost'
-        login_user: 'root'
-        login_password: "{{postgres_root_password}}"
-        name: demo
-        state: present
-
-    - name: create demo user
-      postgres_user:
-        login_host: 'localhost'
-        login_user: 'root'
-        login_password: "{{postgres_root_password}}"
-        name: demo
-        password: demo
-        priv: demo.*:ALL
-        host: '%'
-        state: present
-
-    - name: ensure postgres started
-      service:
-        name: postgres
-        state: started
-        enabled: yes
-      tags: pure_ansible
-    
-    - name: ensure postgres listening on all ports
-      lineinfile:
-        dest: /etc/postgres/postgres.conf.d/postgresd.cnf
-        regexp: ^bind-address
-        line: "bind-address = 0.0.0.0"
-      notify: restart mysql
-      tags: pure_ansible
-
-  handlers:
-    - name: restart postgres
-      service:
-        name: postgres-server
-        state: restarted
-      tags: pure_ansible
+    - name: change listen_addresses to '*'
+      lineinfile: 
+        dest: /etc/postgresql/10/main/postgresql.conf 
+        regexp: "^#listen_addresses" 
+        line: "listen_addresses = '*'" 
+        state: present 
+        backup: yes
+      become: yes
+      notify:
+        - restart postgresql
+  tags:
+    - postgres
+  vars:
+    postgresql_databases:
+      - name: demodb
+    postgresql_users:
+      - name: demouser
+      - password: pass123
+    postgresql_locales:
+      - 'en_US.UTF-8'
+    postgresql_hba_entries:
+      - { type: local, database: all, user: postgres, auth_method: peer }
+      - { type: local, database: all, user: all, auth_method: peer }
+      - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: md5 }
+      - { type: host, database: all, user: all, address: '0.0.0.0/0', auth_method: md5 }
+      - { type: host, database: all, user: all, address: '::1/128', auth_method: md5 }

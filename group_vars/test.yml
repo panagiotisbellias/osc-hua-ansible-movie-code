@@ -1,1 +1,17 @@
-postgres_myuser_password: 12345
+app_port: 8000
+djangoservice:
+    user_dir: "/home/azureuser"
+    group: "azureuser"
+    workingdir: "{{ user_dir }}/django-project/movies_app"
+    execstart: "{{user_dir}}/django-project/myvenv/bin/gunicorn --access-logfile - --workers 3 --bind 0.0.0.0:8000 movies_app.wsgi:application"
+
+vars_files:
+  - secrets/django-secret-key.yml
+
+django:
+    env:
+        SECRET_KEY: 'test123'
+        DATABASE_URL: 'postgresql://demouser:pass123@deployment1/demodb'
+        ALLOWED_HOSTS: '127.0.0.1,localhost'
+        EMAIL_USER: 'devops.mailing.71.110@gmail.com'
+        EMAIL_PASSWD: ''

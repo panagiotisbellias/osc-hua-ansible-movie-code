@@ -3,7 +3,7 @@
   hosts: all
   roles:
     - role: geerlingguy.postgresql
-      become: yes
+      become: true
   tasks:
     - name: change listen_addresses to '*'
       lineinfile: 

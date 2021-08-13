@@ -1,5 +1,5 @@
 ---
-- hosts: gcloud_ansible
+- hosts: all
 
   vars:
     app_dir: "{{user_dir}}/e-movies-app"
@@ -50,20 +50,10 @@
     lineinfile:
         dest: "{{app_dir}}/movies_app/movies_app/.env"
         state: present
-        regexp: "^{{item_key}}="
-        line: "{{item_key}}='{{item_value}}'"
+        regexp: "^{{item.key}}="
+        line: "{{item.key}}='{{item.value}}'"
     with_items:
         - "{{django.env | dict2items}}"
-
-  - name: print ip
-    debug:
-        msg: "ALLOWED_HOSTS={{ansible_all_ipv4_addresses}}"
-
-  - name: add ip in django ALLOWED_HOSTS
-    lineinfile:
-      dest: "{{app_dir}}/movies_app/movies_app/.env"
-      regexp: "^ALLOWED_HOSTS="
-      line: "ALLOWED_HOSTS={{ansible_all_ipv4_addresses}}"
 
   - name: install and activate virtual environment
     block:
@@ -90,13 +80,15 @@
 
     - name: make migrations
       django_manage:
-        command: "{{ item }}"
+        command: "makemigrations"
         project_path: "{{app_dir}}/movies_app"
         virtualenv: "{{app_dir}}/myvenv"
-      with_items:
-        - makemigrations
-        - migrate
 
+    - name: migrate
+      django_manage:
+        command: "migrate"
+        project_path: "{{app_dir}}/movies_app"
+        virtualenv: "{{app_dir}}/myvenv"
 
     - name: copy django service file
       template:

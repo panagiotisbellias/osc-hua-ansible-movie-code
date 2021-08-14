@@ -13,4 +13,9 @@ server {
       proxy_pass http://localhost:{{app_port}};
     }
 
+    location /static {
+      autoindex on;
+      alias /static/;
+    }
+
   }

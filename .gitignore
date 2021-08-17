@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 
 fix_git.sh
+playbooks/secrets/

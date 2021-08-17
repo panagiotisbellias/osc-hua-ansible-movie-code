@@ -6,12 +6,14 @@ djangoservice:
     execstart: "{{user_dir}}/django-project/myvenv/bin/gunicorn --access-logfile - --workers 3 --bind 0.0.0.0:8000 movies_app.wsgi:application"
 
 vars_files:
-  - secrets/django-secret-key.yml
+  - secrets/django-env.yml
+
+vm_name: "deployment1"
 
 django:
     env:
         SECRET_KEY: 'test123'
-        DATABASE_URL: 'postgresql://demouser:pass123@deployment1/demodb'
-        ALLOWED_HOSTS: '127.0.0.1,localhost'
+        DATABASE_URL: 'postgresql://demouser:pass123@db/demodb'
+        ALLOWED_HOSTS: '127.0.0.1,localhost,13.93.45.193'
         EMAIL_USER: 'devops.mailing.71.110@gmail.com'
-        EMAIL_PASSWD: ''
+        EMAIL_PASSWD: 'devopsmailconcept'

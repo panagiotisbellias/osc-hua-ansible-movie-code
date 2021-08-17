@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: install django app
+  hosts: all
 
   vars:
     app_dir: "{{user_dir}}/e-movies-app"

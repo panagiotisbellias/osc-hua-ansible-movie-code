@@ -1,0 +1,126 @@
+---
+- name: install django app with docker-compose
+  hosts: all
+  vars:
+    app_dir: "{{user_dir}}/e-movies-app"
+    git_repo_url: "https://github.com/panagiotisbellias/e-movies-app.git"
+    git_repo_branch: "main"
+  become: yes
+  become_user: root
+  tasks:
+    - name: Install docker packages
+      remote_user: "{{djangoservice.group}}"
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+      tags:
+        - docker
+    - name: Add Docker s official GPG key
+      remote_user: "{{djangoservice.group}}"
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+      tags:
+        - docker
+    - name: Verify that we have the key with the fingerprint
+      remote_user: "{{djangoservice.group}}"
+      apt_key:
+        id: 0EBFCD88
+        state: present
+      tags:
+        - docker
+    - name: Set up the stable repository
+      remote_user: "{{djangoservice.group}}"
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+        state: present
+        update_cache: yes
+      tags:
+        - docker
+    - name: Update apt packages
+      remote_user: "{{djangoservice.group}}"
+      apt:
+        update_cache: yes
+      tags:
+        - docker
+    - name: Install docker
+      remote_user: "{{djangoservice.group}}"
+      apt:
+        name: docker-ce
+        state: present
+        update_cache: yes
+      #notify: Start docker on boot
+      tags:
+        - docker
+    - name: Add remote "{{djangoservice.group}}" user to "docker" group
+      remote_user: "{{djangoservice.group}}"
+      user:
+        name: "{{djangoservice.group}}"
+        group: "docker"
+        append: yes
+      tags:
+        - docker
+    - name: Install docker-compose
+      remote_user: "{{djangoservice.group}}"
+      get_url: 
+        url : https://github.com/docker/compose/releases/download/1.25.1-rc1/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+  
+
+    - name: ensure github.com is a known host
+      lineinfile:
+          dest: "{{user_dir}}/.ssh/known_hosts"
+          create: yes
+          state: present
+          line: "{{lookup('pipe', 'ssh-keyscan -t rsa github.com')}}"
+          regexp: "^github\\.com"
+
+    - name: clone django project
+      git:
+          repo: "{{git_repo_url}}"
+          version: "{{git_repo_branch}}"
+          clone: yes
+          force: yes
+          dest: "{{app_dir}}"
+      changed_when: true
+
+    - name: copy env file
+      shell: "cp {{app_dir}}/movies_app/movies_app/.env.example {{app_dir}}/movies_app/movies_app/.env"
+
+    - name: populate ~/.env
+      lineinfile:
+          dest: "{{app_dir}}/movies_app/movies_app/.env"
+          state: present
+          regexp: "^{{item.key}}="
+          line: "{{item.key}}='{{item.value}}'"
+      with_items:
+          - "{{django.env | dict2items}}"
+
+    - name: Tear down existing services
+      community.docker.docker_compose:
+        project_src: "{{app_dir}}"
+        state: absent
+
+    - name: Create and start services
+      community.docker.docker_compose:
+        project_src: "{{app_dir}}"
+      register: output
+
+    - ansible.builtin.debug:
+        var: output
+
+    - name: Run `docker-compose up`
+      community.docker.docker_compose:
+        project_src: "{{app_dir}}"
+        build: no
+      register: output
+
+    - ansible.builtin.debug:
+        var: output

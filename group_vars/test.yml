@@ -16,4 +16,4 @@ django:
         DATABASE_URL: 'postgresql://demouser:pass123@db/demodb'
         ALLOWED_HOSTS: '127.0.0.1,localhost,13.93.45.193'
         EMAIL_USER: 'devops.mailing.71.110@gmail.com'
-        EMAIL_PASSWD: 'devopsmailconcept'
+        EMAIL_PASSWD: ''

@@ -134,7 +134,7 @@
         dest: "{{app_dir}}/movies_app/movies_app/.env"
         state: present
         regexp: "^DEBUG="
-        line: "DEBUG='{{DEBUG}}'"
+        line: "DEBUG=False"
 
     - name: Tear down existing services
       community.docker.docker_compose:

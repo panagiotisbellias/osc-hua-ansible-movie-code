@@ -87,7 +87,7 @@
         dest: "{{app_dir}}/movies_app/movies_app/.env"
         state: present
         regexp: "^DEBUG="
-        line: "DEBUG='{{DEBUG}}'"
+        line: "DEBUG=False"
 
   - name: install and activate virtual environment
     block:

@@ -19,10 +19,10 @@
     - postgres
   vars:
     postgresql_databases:
-      - name: {{PSQL_DB}}
+      - name: "{{ PSQL_DB }}"
     postgresql_users:
-      - name: {{PSQL_USER}}
-      - password: {{PSQL_PASSWD}}
+      - name: "{{ PSQL_USER }}"
+      - password: "{{ PSQL_PASSWD }}"
     postgresql_locales:
       - 'en_US.UTF-8'
     postgresql_hba_entries:

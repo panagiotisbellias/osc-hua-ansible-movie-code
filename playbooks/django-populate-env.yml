@@ -3,7 +3,7 @@
   hosts: localhost
 
   vars:
-    user_dir: "/home/jenkins/workspace"
+    user_dir: "/var/lib/jenkins/workspace"
     app_dir: "{{user_dir}}/e-movies-app"
 
   tasks:

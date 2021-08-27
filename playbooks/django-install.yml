@@ -112,17 +112,17 @@
         virtualenv: "{{app_dir}}/myvenv"
         virtualenv_python: python3
 
-    - name: make migrations
-      django_manage:
-        command: "makemigrations"
-        app_path: "{{app_dir}}/movies_app"
-        virtualenv: "{{app_dir}}/myvenv"
+    #- name: make migrations
+    #  django_manage:
+    #    command: "makemigrations"
+    #    app_path: "{{app_dir}}/movies_app"
+    #    virtualenv: "{{app_dir}}/myvenv"
 
-    - name: migrate
-      django_manage:
-        command: "migrate"
-        app_path: "{{app_dir}}/movies_app"
-        virtualenv: "{{app_dir}}/myvenv"
+    #- name: migrate
+    #  django_manage:
+    #    command: "migrate"
+    #    app_path: "{{app_dir}}/movies_app"
+    #    virtualenv: "{{app_dir}}/myvenv"
 
     - name: copy django service file
       template:
@@ -162,8 +162,8 @@
         src: "{{item}}"
         dest: /etc/ssl/private/
       with_items:
-        - ../files/certs/django/server.crt
-        - ../files/certs/django/server.key
+        - ../files/certs/django/certificate.crt
+        - ../files/certs/django/private.key
   
     - name: enable django site in nginx
       file:

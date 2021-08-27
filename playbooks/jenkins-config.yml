@@ -1,6 +1,6 @@
 ---
 - name: install nginx and ssl certificates in jenkins
-  hosts: jenkins
+  hosts: all
 
   tasks:
 

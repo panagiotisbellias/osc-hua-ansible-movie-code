@@ -124,19 +124,19 @@
     #    app_path: "{{app_dir}}/movies_app"
     #    virtualenv: "{{app_dir}}/myvenv"
 
-    - name: copy django service file
-      template:
-        src: ../files/django/gunicorn.service.j2
-        dest: "/etc/systemd/system/gunicorn.service"
-      become: yes
-      become_user: root
+    #- name: copy django service file
+    #  template:
+    #    src: ../files/django/gunicorn.service.j2
+    #    dest: "/etc/systemd/system/gunicorn.service"
+    #  become: yes
+    #  become_user: root
       
-    - name: ensure gunicorn service started
-      service: 
-        name: gunicorn
-        state: started
-        enabled: yes
-      become: yes
+    #- name: ensure gunicorn service started
+    #  service: 
+    #    name: gunicorn
+    #    state: started
+    #    enabled: yes
+    #  become: yes
 
 
   - name: install and configure nginx

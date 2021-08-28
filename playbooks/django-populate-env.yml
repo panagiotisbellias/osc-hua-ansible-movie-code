@@ -51,3 +51,24 @@
         state: present
         regexp: "^DEBUG="
         line: "DEBUG=False"
+
+  - name: populate fqdn in ingress http controller
+    lineinfile:
+        dest: "{{app_dir}}/k8s/django/django-ingress.yaml"
+        state: present
+        regexp: "^  - host"
+        line: '  - host: "{{ALLOWED_HOSTS}}"'
+
+  - name: populate fqdn in ingress https controller spot 1
+    lineinfile:
+        dest: "{{app_dir}}/k8s/django/django-https-ingress.yaml"
+        state: present
+        regexp: "^  - host"
+        line: '  - host: "{{ALLOWED_HOSTS}}"'
+
+  - name: populate fqdn in ingress https controller spot 2
+    lineinfile:
+        dest: "{{app_dir}}/k8s/django/django-https-ingress.yaml"
+        state: present
+        regexp: "^    - hosts: "
+        line: '    - hosts: \n      - {{ALLOWED_HOSTS}}'

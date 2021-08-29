@@ -1,6 +1,7 @@
 app_port: 8000
 djangoservice:
+    user: "azureuser"
     user_dir: "/home/azureuser"
     group: "azureuser"
-    workingdir: "{{ user_dir }}/django-project/movies_app"
-    execstart: "{{user_dir}}/django-project/myvenv/bin/gunicorn --access-logfile - --workers 3 --bind 0.0.0.0:8000 movies_app.wsgi:application"
+    workingdir: "{{ user_dir }}/e-movies-app/movies_app"
+    execstart: "{{ user_dir }}/e-movies-app/myvenv/bin/gunicorn --access-logfile - --workers 3 --bind 0.0.0.0:8000 movies_app.wsgi:application"

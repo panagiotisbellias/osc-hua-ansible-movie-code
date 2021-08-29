@@ -43,6 +43,7 @@
         force: yes
         dest: "{{app_dir}}"
     changed_when: true
+    become: yes
 
   - name: copy env file
     shell: "cp {{app_dir}}/movies_app/movies_app/.env.example {{app_dir}}/movies_app/movies_app/.env"
@@ -151,11 +152,23 @@
       template:
         src: ../files/nginx/demo.nginx.j2
         dest: "/etc/nginx/sites-available/django"
+
+    - name: copy nginx https conf file
+      template:
+        src: ../files/nginx/demo.https.nginx.j2
+        dest: "/etc/nginx/sites-available/djangossl"
   
     - name: enable django site in nginx
       file:
         src: "/etc/nginx/sites-available/django"
         dest: "/etc/nginx/sites-enabled/django"
+        state: link
+      notify: restart nginx
+
+    - name: enable djangossl site in nginx
+      file:
+        src: "/etc/nginx/sites-available/djangossl"
+        dest: "/etc/nginx/sites-enabled/djangossl"
         state: link
       notify: restart nginx
 

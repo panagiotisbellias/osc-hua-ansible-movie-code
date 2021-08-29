@@ -1,5 +1,5 @@
 ---
-- hosts: gcloud_ansible
+- hosts: all
   tasks:
   - debug:
       msg: |

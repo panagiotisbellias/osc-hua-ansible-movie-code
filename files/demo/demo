@@ -1,3 +1,0 @@
-<VirtualHost *>
-DocumentRoot "/var/www/demo"
-</VirtualHost>

@@ -53,6 +53,7 @@
         password: "{{ PSQL_PASSWD }}"
       become: yes
       become_user: postgres
+      become_user: root
 
     - name: "Grant db user access to app db"
       postgresql_privs:

@@ -101,40 +101,40 @@
         regexp: "^SECRET_KEY="
         line: "SECRET_KEY='{{SECRET_KEY}}'"
 
-  - name: populate ~/.env db url
-    lineinfile:
-        dest: "{{app_dir}}/movies_app/movies_app/.env"
-        state: present
-        regexp: "^DATABASE_URL="
-        line: "DATABASE_URL='{{DATABASE_URL}}'"
+    - name: populate ~/.env db url
+      lineinfile:
+          dest: "{{app_dir}}/movies_app/movies_app/.env"
+          state: present
+          regexp: "^DATABASE_URL="
+          line: "DATABASE_URL='{{DATABASE_URL}}'"
 
-  - name: populate ~/.env allowed hosts
-    lineinfile:
-        dest: "{{app_dir}}/movies_app/movies_app/.env"
-        state: present
-        regexp: "^ALLOWED_HOSTS="
-        line: "ALLOWED_HOSTS='{{ALLOWED_HOSTS}}'"
+    - name: populate ~/.env allowed hosts
+      lineinfile:
+          dest: "{{app_dir}}/movies_app/movies_app/.env"
+          state: present
+          regexp: "^ALLOWED_HOSTS="
+          line: "ALLOWED_HOSTS='{{ALLOWED_HOSTS}}'"
 
-  - name: populate ~/.env email user
-    lineinfile:
-        dest: "{{app_dir}}/movies_app/movies_app/.env"
-        state: present
-        regexp: "^EMAIL_USER="
-        line: "EMAIL_USER='{{EMAIL_USER}}'"
+    - name: populate ~/.env email user
+      lineinfile:
+          dest: "{{app_dir}}/movies_app/movies_app/.env"
+          state: present
+          regexp: "^EMAIL_USER="
+          line: "EMAIL_USER='{{EMAIL_USER}}'"
 
-  - name: populate ~/.env email pass
-    lineinfile:
-        dest: "{{app_dir}}/movies_app/movies_app/.env"
-        state: present
-        regexp: "^EMAIL_PASSWD="
-        line: "EMAIL_PASSWD='{{EMAIL_PASSWD}}'"
+    - name: populate ~/.env email pass
+      lineinfile:
+          dest: "{{app_dir}}/movies_app/movies_app/.env"
+          state: present
+          regexp: "^EMAIL_PASSWD="
+          line: "EMAIL_PASSWD='{{EMAIL_PASSWD}}'"
 
-  - name: populate ~/.env debug var
-    lineinfile:
-        dest: "{{app_dir}}/movies_app/movies_app/.env"
-        state: present
-        regexp: "^DEBUG="
-        line: "DEBUG=False"
+    - name: populate ~/.env debug var
+      lineinfile:
+          dest: "{{app_dir}}/movies_app/movies_app/.env"
+          state: present
+          regexp: "^DEBUG="
+          line: "DEBUG=False"
 
     - name: Tear down existing services
       community.docker.docker_compose:

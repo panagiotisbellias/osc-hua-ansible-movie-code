@@ -44,6 +44,7 @@
       become_user: postgres
       postgresql_db:
         name: "{{ PSQL_DB }}"
+        template: 'template0'
         state: present
 
     - name: "Create db user"

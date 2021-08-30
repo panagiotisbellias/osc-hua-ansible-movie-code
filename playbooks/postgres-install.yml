@@ -43,9 +43,8 @@
       postgresql_db:
         state: present
         name: "{{ PSQL_DB }}"
-      become: yes
-      # become_user: postgres
-      become_user: root
+      become_user: postgres
+      # become_user: root
 
     - name: "Create db user"
       postgresql_user:

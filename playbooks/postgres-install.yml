@@ -40,11 +40,12 @@
         - postgresql
 
     - name: "Create app database"
+      become: yes
+      become_user: postgres
       postgresql_db:
         name: "{{ PSQL_DB }}"
         state: present
-      become: true
-      become_user: postgres
+      
 
     - name: "Create db user"
       postgresql_user:

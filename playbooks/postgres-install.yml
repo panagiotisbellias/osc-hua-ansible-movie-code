@@ -11,7 +11,7 @@
         - postgresql
         - postgresql-contrib
         - libpq-dev
-        - python-psycopg2
+        - python3-psycopg2
       become: yes
 
     - name: "Install Python packages"

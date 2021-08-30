@@ -45,6 +45,7 @@
         name: "{{ PSQL_DB }}"
       become: yes
       become_user: postgres
+      become_user: root
 
     - name: "Create db user"
       postgresql_user:
@@ -53,7 +54,6 @@
         password: "{{ PSQL_PASSWD }}"
       become: yes
       become_user: postgres
-      become_user: root
 
     - name: "Grant db user access to app db"
       postgresql_privs:

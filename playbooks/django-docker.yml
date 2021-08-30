@@ -95,7 +95,7 @@
       shell: "cp {{app_dir}}/movies_app/movies_app/.env.example {{app_dir}}/movies_app/movies_app/.env"
 
     - name: populate ~/.env secret key
-    lineinfile:
+      lineinfile:
         dest: "{{app_dir}}/movies_app/movies_app/.env"
         state: present
         regexp: "^SECRET_KEY="

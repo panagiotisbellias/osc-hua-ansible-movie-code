@@ -31,13 +31,6 @@
     #   shell: "postgresql-setup initdb"
     #   when: not postgres_data.stat.exists
  
-    - name: "Validate postgres conf file"
-      lineinfile:
-        dest: "/var/lib/pgsql/data/pg_hba.conf"
-        state: present
-        regexp: "local   all             postgres                                peer"
-        line: "local   all             postgres                                md5"
-
     - name: "Start and enable services"
       service:
         name: "{{ item }}"
@@ -48,10 +41,10 @@
 
     - name: "Create app database"
       postgresql_db:
-        state: present
         name: "{{ PSQL_DB }}"
+        state: present
+      become: yes
       become_user: postgres
-      # become_user: root
 
     - name: "Create db user"
       postgresql_user:

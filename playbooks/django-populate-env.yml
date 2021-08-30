@@ -71,4 +71,4 @@
         dest: "{{app_dir}}/k8s/django/django-https-ingress.yaml"
         state: present
         regexp: "^    - hosts: "
-        line: '    - hosts: \n      - {{ALLOWED_HOSTS}}'
+        line: '    - hosts: PATH=      - {{ALLOWED_HOSTS}}'

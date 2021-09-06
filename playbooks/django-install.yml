@@ -99,11 +99,11 @@
         virtualenv: "{{app_dir}}/myvenv"
         virtualenv_python: python3
 
-    - name: make migrations
-      django_manage:
-        command: "makemigrations"
-        app_path: "{{app_dir}}/movies_app"
-        virtualenv: "{{app_dir}}/myvenv"
+    #- name: make migrations
+    #  django_manage:
+    #    command: "makemigrations"
+    #    app_path: "{{app_dir}}/movies_app"
+    #    virtualenv: "{{app_dir}}/myvenv"
 
     - name: migrate
       django_manage:

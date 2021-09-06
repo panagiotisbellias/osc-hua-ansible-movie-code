@@ -105,27 +105,23 @@
         chdir: "../files/shell_scripts"
       register: djangoutput
 
-    '''
+    # - name: collect static files
+    #   django_manage:
+    #     command: "collectstatic --noinput"
+    #     app_path: "{{app_dir}}/movies_app"
+    #     virtualenv: "{{app_dir}}/myvenv"
 
-    - name: collect static files
-      django_manage:
-        command: "collectstatic --noinput"
-        app_path: "{{app_dir}}/movies_app"
-        virtualenv: "{{app_dir}}/myvenv"
+    # - name: make migrations
+    #   django_manage:
+    #     command: "makemigrations --noinput"
+    #     app_path: "{{app_dir}}/movies_app"
+    #     virtualenv: "{{app_dir}}/myvenv"
 
-    - name: make migrations
-      django_manage:
-        command: "makemigrations --noinput"
-        app_path: "{{app_dir}}/movies_app"
-        virtualenv: "{{app_dir}}/myvenv"
-
-    - name: migrate
-      django_manage:
-        command: "migrate --noinput"
-        app_path: "{{app_dir}}/movies_app"
-        virtualenv: "{{app_dir}}/myvenv"
-        
-    '''
+    # - name: migrate
+    #   django_manage:
+    #     command: "migrate --noinput"
+    #     app_path: "{{app_dir}}/movies_app"
+    #     virtualenv: "{{app_dir}}/myvenv"
 
     - name: copy django service file
       template:

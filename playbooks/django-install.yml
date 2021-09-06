@@ -100,6 +100,12 @@
         virtualenv_python: python3
 
     - name: execute shell script to prepare django app
+      shell: "chmod 777 django_manage.sh"
+      args:
+        chdir: "{{user_dir}}/e-movies-app"
+      register: djangoutput
+
+    - name: execute shell script to prepare django app
       shell: "./django_manage.sh"
       args:
         chdir: "{{user_dir}}/e-movies-app"

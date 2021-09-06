@@ -105,7 +105,8 @@
         chdir: "../files/shell_scripts"
       register: djangoutput
 
-'''
+    '''
+
     - name: collect static files
       django_manage:
         command: "collectstatic --noinput"
@@ -123,7 +124,9 @@
         command: "migrate --noinput"
         app_path: "{{app_dir}}/movies_app"
         virtualenv: "{{app_dir}}/myvenv"
-'''
+        
+    '''
+
     - name: copy django service file
       template:
         src: ../files/django/gunicorn.service.j2

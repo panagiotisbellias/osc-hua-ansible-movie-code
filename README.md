@@ -33,6 +33,7 @@ to check connectivity with declared hosts
 ### Pure Ansible
 * Make sure you have configured the inventory file and you are now in the root folder of this project.
 * Postgres Installation
+
 [postgres-install.yml](playbooks/postgres-install.yml): This playbook installs all the packages needed, starts the postgresql service and creates a database and a user for our django project according to values passed during execution from the command line. Also we declare explicitly to which group of hosts we want to install our service. 
 ```bash
 ansible-playbook -l <group-name> playbooks/postgres-install.yml \
@@ -42,6 +43,7 @@ ansible-playbook -l <group-name> playbooks/postgres-install.yml \
 ```
 This operation is done automatically with Jenkins CI/CD Tool and Jenkinsfile.
 * Django Project Installation
+
 [django-install.yml](playbooks/django-install.yml): This playbook clones django project code, activates virtual environment, installs all requirements, populate .env variables, makes migrations, starts a gunicorn service and installs and configures an NGINX web server with ssl certificates according to values passed during execution from the command line. Also we declare explicitly to which group of hosts we want to deploy our app.
 ```bash
 ansible-playbook -l <group-name> playbooks/django-install.yml \
@@ -53,6 +55,7 @@ This operation is also done automatically with Jenkins CI/CD Tool and Jenkinsfil
 
 ### Ansible & Docker
 * Containers For Django App
+
 [django-docker.yml](playbooks/django-docker.yml): This playbook installs docker and docker-compose packages, clones django project code, populate .env variables, and scales up the containers declared in the docker-compose.yml of django project taking build instructions from nonroot.Dockerfile of our app, according also to values passed during execution from the command line. Also we declare explicitly to which group of hosts we want to deploy our app.
 ```bash
 ansible-playbook -l <group-name> playbooks/django-docker.yml \

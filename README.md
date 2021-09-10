@@ -29,3 +29,59 @@ For testing you can use either [vagrant](https://www.vagrantup.com/) using [Virt
 ansible -m ping all
 ```
 to check connectivity with declared hosts
+
+## Deployment Support
+
+### Pure Ansible
+* Make sure you have configured the inventory file and you are now in the root folder of this project.
+* Postgres Installation
+[postgres-install.yml](playbooks/postgres-install.yml): This playbook installs all the packages needed, starts the postgresql service and creates a database and a user for our django project according to values passed during execution from the command line. Also we declare explicitly to which group of hosts we want to install our service. 
+```bash
+ansible-playbook -l <group-name> playbooks/postgres-install.yml \
+-e PSQL_USER=<username-for-db-user> \
+-e PSQL_PASSWD=<password-for-db-user> \
+-e PSQL_DB=<name-for-our-database>
+```
+This operation is done automatically with Jenkins CI/CD Tool and Jenkinsfile.
+* Django Project Installation
+[django-install.yml](playbooks/django-install.yml): This playbook clones django project code, activates virtual environment, installs all requirements, populate .env variables, makes migrations, starts a gunicorn service and installs and configures an NGINX web server with ssl certificates according to values passed during execution from the command line. Also we declare explicitly to which group of hosts we want to deploy our app.
+```bash
+ansible-playbook -l <group-name> playbooks/django-install.yml \
+-e SECRET_KEY='<a-random-string-same-every-time>' \
+-e DATABASE_URL=<url-where-database-runs-with-right-credentials> \ # e.g. postgresql://testuser:pass1234@localhost/demo_db
+-e ALLOWED_HOSTS=<your-domain-name-where-app-runs>
+```
+This operation is also done automatically with Jenkins CI/CD Tool and Jenkinsfile.
+
+### Ansible & Docker
+* Containers For Django App
+[django-docker.yml](playbooks/django-docker.yml): This playbook installs docker and docker-compose packages, clones django project code, populate .env variables, and scales up the containers declared in the docker-compose.yml of django project taking build instructions from nonroot.Dockerfile of our app, according also to values passed during execution from the command line. Also we declare explicitly to which group of hosts we want to deploy our app.
+```bash
+ansible-playbook -l <group-name> playbooks/django-docker.yml \
+-e SECRET_KEY='<a-random-string-same-every-time>' \
+-e DATABASE_URL=<url-where-database-runs-with-right-credentials> \ # e.g. postgresql://demouser:pass123@db/deploy_db
+-e ALLOWED_HOSTS=<your-domain-name-where-app-runs>
+```
+This operation is also done automatically with Jenkins CI/CD Tool and Jenkinsfile.
+
+### Kubernetes Deployment Usage
+* The [django-populate-env.yml](playbooks/django-populate-env.yml) is used to populate the .env variables after we have cloned locally our project and before we will be applying the k8s .yaml files to have entities creation. Because a configmap must be generated from .env file we have locally, so the playbook doesn't handle some remote host but only localhost (No need to declare group of hosts). These values are passed from the command line like before.
+```bash
+ansible-playbook playbooks/django-populate-env.yml \
+-e SECRET_KEY='<a-random-string-same-every-time>' \
+-e DATABASE_URL=<url-where-database-runs-with-right-credentials> \ # e.g. postgresql://testuser:pass1234@pg-cluster-ip/demo_db
+-e ALLOWED_HOSTS=<your-domain-name-where-app-runs>
+```
+This operation is also done automatically with Jenkins CI/CD Tool and Jenkinsfile with the rest commands needed to deploy on a k8s cluster.
+
+## SSL Configuration using playbooks
+
+* [ansible-https](playbooks/ansible-https.yml): This is used only manually (no Jenkins involved) so as to configure SSL certificates for HTTPS environment in ansible-vm.
+* [jenkins-config](playbooks/jenkins-config.yml): This is used so as to configure SSL certificates for HTTPS environment in jenkins-server for extra security.
+
+## files folder
+
+* [django](files/django): has a file that describes how the gunicorn service is built and running in a VM.
+* [nginx](files/nginx): has configuration files for nginx sites like the django app and the jenkins service, both in HTTP and HTTPS.
+
+For HTTPS you should make a folder named 'certs' under [files folder](files) and there you have to store (and concatenate according ZeroSSL instructions) your SSL Certificates for your ansible-vm under django subfolder, and your jenkins-server under jenkins subfolder.

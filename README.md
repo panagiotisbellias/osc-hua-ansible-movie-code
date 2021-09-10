@@ -86,3 +86,5 @@ This operation is also done automatically with Jenkins CI/CD Tool and Jenkinsfil
 * [nginx](files/nginx): has configuration files for nginx sites like the django app and the jenkins service, both in HTTP and HTTPS.
 
 For HTTPS you should make a folder named 'certs' under [files folder](files) and there you have to store (and concatenate according ZeroSSL instructions) your SSL Certificates for your ansible-vm under django subfolder, and your jenkins-server under jenkins subfolder.
+
+## It's our pleasure to contact us at our social media or at github [issues](https://github.com/panagiotisbellias/e-movies-app/issues)

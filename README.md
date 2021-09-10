@@ -1,8 +1,6 @@
 # ansible-movie-code
 Ansible Movie Code, an ansible project in the context of HUA DIT course 'Basic DevOps Concepts and Tools'
 
-Content is coming very soon!
-
 ## Connectivity
 
 * Create an inventory file (e.g. hosts.yml) that holds the remote hosts that ansible will handle. The file will have entries look like:

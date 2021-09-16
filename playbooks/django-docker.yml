@@ -159,5 +159,15 @@
         build: no
       register: output
 
+    - name: Execute makemigrations
+      shell:
+        "docker exec -it e-movies-app_django_1 python manage.py makemigrations"
+      register: makemigrations_res
+
+    - name: Execute migrate
+      shell:
+        "docker exec -it e-movies-app_django_1 python manage.py migrate"
+      register: migrate_res
+
     - ansible.builtin.debug:
         var: output

@@ -1,0 +1,4 @@
+djangoservice:
+    user: "belli"
+    user_dir: "/home/belli"
+    group: "belli"

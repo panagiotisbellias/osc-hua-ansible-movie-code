@@ -1,4 +1,0 @@
-djangoservice:
-    user: "azureuser"
-    user_dir: "/home/azureuser"
-    group: "azureuser"

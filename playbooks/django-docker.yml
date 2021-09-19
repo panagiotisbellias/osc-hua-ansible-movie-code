@@ -124,11 +124,13 @@
 
     - name: copy certificates
       copy:
-        src: "{{item}}"
-        dest: "{{app_dir}}/assets/nginx/certs/"
-      with_items:
-        - ../files/certs/docker/certificate.crt
-        - ../files/certs/docker/private.key
+        src: "../files/certs/docker/certificate.crt"
+        dest: "{{app_dir}}/assets/nginx/certs/server.crt"
+
+    - name: copy certificates
+      copy:
+        src: "../files/certs/docker/private.key"
+        dest: "{{app_dir}}/assets/nginx/certs/server.key"
 
     - name: install pip3
       apt:
@@ -169,13 +171,8 @@
 
     - name: Execute makemigrations
       shell:
-        "docker exec -it e-movies-app_django_1 python manage.py makemigrations"
+        "docker exec -it e-movies-app_django_1 ./manage.py makemigrations && docker exec -it e-movies-app_django_1 ./manage.py migrate"
       register: makemigrations_res
-
-    - name: Execute migrate
-      shell:
-        "docker exec -it e-movies-app_django_1 python manage.py migrate"
-      register: migrate_res
 
     - ansible.builtin.debug:
         var: output

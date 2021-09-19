@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -- NOT USED
 
 # Activate virtual environment
 source myvenv/bin/activate

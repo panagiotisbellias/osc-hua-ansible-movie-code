@@ -122,15 +122,15 @@
           regexp: "^DEBUG="
           line: "DEBUG=False"
 
-    - name: copy certificates
-      copy:
-        src: "../files/certs/docker/certificate.crt"
-        dest: "{{app_dir}}/assets/nginx/certs/server.crt"
+    # - name: copy certificates
+    #   copy:
+    #     src: "../files/certs/docker/certificate.crt"
+    #     dest: "{{app_dir}}/assets/nginx/certs/server.crt"
 
-    - name: copy certificates
-      copy:
-        src: "../files/certs/docker/private.key"
-        dest: "{{app_dir}}/assets/nginx/certs/server.key"
+    # - name: copy certificates
+    #   copy:
+    #     src: "../files/certs/docker/private.key"
+    #     dest: "{{app_dir}}/assets/nginx/certs/server.key"
 
     - name: install pip3
       apt:

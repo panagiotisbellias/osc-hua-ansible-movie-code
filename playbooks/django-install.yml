@@ -53,7 +53,7 @@
         dest: "{{app_dir}}/movies_app/movies_app/.env"
         state: present
         regexp: "^SECRET_KEY="
-        line: "SECRET_KEY='{{SECRET_KEY}}'"
+        line: "SECRET_KEY='{{SECRET_KEY | quote}}'"
 
   - name: populate ~/.env db url
     lineinfile:

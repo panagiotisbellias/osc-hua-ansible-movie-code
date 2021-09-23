@@ -171,7 +171,7 @@
 
     - name: Execute makemigrations
       shell:
-        "docker exec -it e-movies-app_django_1 ./manage.py makemigrations && docker exec -it e-movies-app_django_1 ./manage.py migrate"
+        "docker exec -it e-movies-app_django_1 ./manage.py makemigrations"
       register: makemigrations_res
 
     - ansible.builtin.debug:
